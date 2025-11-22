@@ -49,20 +49,39 @@ export function useWebLLM() {
     };
   }, []);
 
-  const generatePost = useCallback(
-    async (abstract: string, onChunk: (text: string) => void) => {
-      if (!engineRef.current || engineState !== "ready") {
-        throw new Error("Engine not ready");
-      }
+  const getFewShotExamples = (slopLevel: number): string => {
+    const examples = {
+      1: `INPUT: "We propose a novel neural architecture that achieves state-of-the-art performance on ImageNet classification through attention mechanisms and residual connections."
 
-      setEngineState("generating");
+OUTPUT:
+Recent advances in computer vision have demonstrated the effectiveness of attention-based architectures combined with residual learning.
 
-      try {
-        const prompt = `You are a viral LinkedIn ghostwriter. Transform academic abstracts into scroll-stopping posts using "Bro-etry" style.
+This research presents a novel approach that achieves state-of-the-art results on ImageNet classification. The key innovation lies in the efficient integration of attention mechanisms with residual connections, enabling better feature learning while maintaining computational efficiency.
 
-EXAMPLES:
+Key findings:
+• Attention mechanisms improve model interpretability
+• Residual connections enable deeper network training
+• Combined approach outperforms previous benchmarks
 
-INPUT: "We propose a novel neural architecture that achieves state-of-the-art performance on ImageNet classification through attention mechanisms and residual connections."
+The results suggest that architectural innovations focused on efficiency can match or exceed larger, more computationally expensive models. This has important implications for deploying advanced vision systems in resource-constrained environments.`,
+
+      2: `INPUT: "We propose a novel neural architecture that achieves state-of-the-art performance on ImageNet classification through attention mechanisms and residual connections."
+
+OUTPUT:
+Attention mechanisms are changing computer vision.
+
+A new architecture combines attention with residual learning to achieve impressive results on ImageNet classification. The approach is both effective and efficient.
+
+What makes this interesting:
+• Better accuracy than previous methods
+• More efficient than larger models
+• Easier to interpret results
+
+The key insight: you don't always need bigger models. Smart architecture design can deliver better performance with fewer resources.
+
+This matters for practical AI deployment where computational budgets are limited.`,
+
+      3: `INPUT: "We propose a novel neural architecture that achieves state-of-the-art performance on ImageNet classification through attention mechanisms and residual connections."
 
 OUTPUT:
 AI just got 10x faster. ⚡
@@ -82,39 +101,88 @@ Beat every benchmark.
 
 The takeaway? Efficiency beats brute force.
 
-What's your take—should we chase scale or speed?
+What's your take—should we chase scale or speed?`,
 
----
-
-INPUT: "This paper investigates the effectiveness of large language models in code generation tasks, finding significant performance improvements when models are fine-tuned on domain-specific datasets."
+      4: `INPUT: "We propose a novel neural architecture that achieves state-of-the-art performance on ImageNet classification through attention mechanisms and residual connections."
 
 OUTPUT:
-I let AI write my code for 30 days.
+Everyone's building bigger AI models.
 
-Here's what happened.
+They're doing it wrong. 🚨
 
-Most devs think AI can't handle real work.
-They're wrong.
+I just saw a breakthrough that crushes the competition with HALF the computing power.
 
-The difference?
-Training on the RIGHT data.
+The game-changer?
+Attention + residual connections = magic
 
-Generic models = generic code.
-Specialized models = production-ready solutions.
+Why this matters:
+✓ Fastest inference time ever recorded
+✓ Cheaper to run than GPT-3
+✓ Better accuracy than the "gold standard"
 
-3 things I learned:
-• Domain knowledge > model size
-• Fine-tuning beats prompting
-• Context is everything
+Tested on 1M+ images.
+DOMINATED every benchmark.
 
-Bottom line: AI won't replace you.
-But developers using AI will replace those who don't.
+Big tech doesn't want you to know this.
 
-Are you adapting or resisting?
+Drop a 💯 if you're tired of the "bigger is better" lie.`,
+
+      5: `INPUT: "We propose a novel neural architecture that achieves state-of-the-art performance on ImageNet classification through attention mechanisms and residual connections."
+
+OUTPUT:
+They said it was impossible. 🤯
+
+I just watched AI get 50X FASTER overnight.
+
+And Big Tech is FURIOUS. 😤
+
+Here's the INSANE secret they're hiding:
+
+🔥 Attention mechanisms (but WEAPONIZED)
+🔥 Skip connections (on STEROIDS)
+🔥 Zero bloat. Pure DOMINANCE.
+
+The results?
+→ 1 MILLION images tested
+→ CRUSHED every record
+→ Made billion-dollar models look PATHETIC
+
+Your boss is still buying overpriced GPUs.
+You could be running THIS for pennies.
+
+The AI revolution isn't coming.
+It's HERE.
+And 99% of "experts" missed it.
+
+Comment "GAME OVER" if you're ready to disrupt everything. 👇`,
+    };
+
+    return examples[slopLevel as keyof typeof examples] || examples[3];
+  };
+
+  const generatePost = useCallback(
+    async (abstract: string, slopLevel: number, onChunk: (text: string) => void) => {
+      if (!engineRef.current || engineState !== "ready") {
+        throw new Error("Engine not ready");
+      }
+
+      setEngineState("generating");
+
+      try {
+        const fewShotExamples = getFewShotExamples(slopLevel);
+        const styleInstructions = slopLevel <= 2
+          ? "Use a professional, academic tone with clear structure and formal language."
+          : "Use short lines, contrarian hooks, bullet points, and emoji sparingly.";
+
+        const prompt = `You are a LinkedIn content writer. Transform this academic abstract into an engaging LinkedIn post.
+
+EXAMPLE:
+
+${fewShotExamples}
 
 ---
 
-Now transform this abstract using the EXACT same style—short lines, contrarian hooks, bullet points, emoji sparingly:
+Now transform this abstract using the EXACT same style and tone as the example above. ${styleInstructions}
 
 ${abstract}
 

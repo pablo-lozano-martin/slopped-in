@@ -7,6 +7,7 @@ import { useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import ResultsGrid from "@/components/ResultsGrid";
 import PostPreview from "@/components/PostPreview";
+import SlopMeter from "@/components/SlopMeter";
 import { useWebLLM } from "@/hooks/useWebLLM";
 import { Paper } from "@/types";
 import { Sparkles, Loader2, AlertCircle } from "lucide-react";
@@ -17,6 +18,7 @@ export default function Home() {
   const [generatedPost, setGeneratedPost] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const [slopLevel, setSlopLevel] = useState(3);
 
   const { engineState, loadingProgress, error: engineError, generatePost } = useWebLLM();
 
@@ -51,12 +53,25 @@ export default function Home() {
 
     if (engineState === "ready") {
       try {
-        await generatePost(paper.summary, (text) => {
+        await generatePost(paper.summary, slopLevel, (text) => {
           setGeneratedPost(text);
         });
       } catch (err) {
         console.error("Generation failed:", err);
       }
+    }
+  };
+
+  const handleRegeneratePost = async () => {
+    if (!selectedPaper || engineState !== "ready") return;
+
+    setGeneratedPost("");
+    try {
+      await generatePost(selectedPaper.summary, slopLevel, (text) => {
+        setGeneratedPost(text);
+      });
+    } catch (err) {
+      console.error("Generation failed:", err);
     }
   };
 
@@ -122,6 +137,26 @@ export default function Home() {
           selectedPaper={selectedPaper}
           onSelectPaper={handleSelectPaper}
         />
+
+        {selectedPaper && (
+          <SlopMeter
+            value={slopLevel}
+            onChange={async (newLevel) => {
+              setSlopLevel(newLevel);
+              if (engineState === "ready") {
+                setGeneratedPost("");
+                try {
+                  await generatePost(selectedPaper.summary, newLevel, (text) => {
+                    setGeneratedPost(text);
+                  });
+                } catch (err) {
+                  console.error("Generation failed:", err);
+                }
+              }
+            }}
+            disabled={engineState !== "ready"}
+          />
+        )}
 
         <PostPreview
           content={generatedPost}
