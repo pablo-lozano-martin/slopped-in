@@ -7,7 +7,7 @@ import { CreateMLCEngine, MLCEngine } from "@mlc-ai/web-llm";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { EngineState } from "@/types";
 
-export function useWebLLM() {
+export function useWebLLM(selectedModel: string) {
   const [engineState, setEngineState] = useState<EngineState>("loading");
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +22,11 @@ export function useWebLLM() {
           throw new Error("WebGPU is not supported in this browser");
         }
 
-        const engine = await CreateMLCEngine("Qwen2.5-3B-Instruct-q4f16_1-MLC", {
+        setEngineState("loading");
+        setLoadingProgress(0);
+        setError(null);
+
+        const engine = await CreateMLCEngine(selectedModel, {
           initProgressCallback: (progress) => {
             if (mounted) {
               setLoadingProgress(Math.round(progress.progress * 100));
@@ -47,7 +51,7 @@ export function useWebLLM() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [selectedModel]);
 
   const getFewShotExamples = (slopLevel: number): string => {
     const examples = {

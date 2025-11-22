@@ -8,6 +8,7 @@ import SearchBar from "@/components/SearchBar";
 import ResultsGrid from "@/components/ResultsGrid";
 import PostPreview from "@/components/PostPreview";
 import SlopMeter from "@/components/SlopMeter";
+import ModelSelector from "@/components/ModelSelector";
 import { useWebLLM } from "@/hooks/useWebLLM";
 import { Paper } from "@/types";
 import { Sparkles, Loader2, AlertCircle } from "lucide-react";
@@ -19,8 +20,9 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [slopLevel, setSlopLevel] = useState(3);
+  const [selectedModel, setSelectedModel] = useState("Qwen2.5-3B-Instruct-q4f16_1-MLC");
 
-  const { engineState, loadingProgress, error: engineError, generatePost } = useWebLLM();
+  const { engineState, loadingProgress, error: engineError, generatePost } = useWebLLM(selectedModel);
 
   const handleSearch = async (query: string, yearFilter: string) => {
     setIsSearching(true);
@@ -78,6 +80,12 @@ export default function Home() {
           </p>
         </header>
 
+        <ModelSelector
+          value={selectedModel}
+          onChange={setSelectedModel}
+          disabled={engineState === "loading"}
+        />
+
         {engineState === "loading" && (
           <div className="max-w-2xl mx-auto mb-8 p-6 bg-blue-50 border-2 border-blue-200 rounded-lg">
             <div className="flex items-center gap-3 mb-3">
@@ -91,10 +99,10 @@ export default function Home() {
               />
             </div>
             <p className="text-sm text-gray-600">
-              Downloading Qwen 2.5 (3B) - {loadingProgress}%
+              Downloading {selectedModel.includes("3B") ? "Qwen 2.5 (3B)" : "Qwen 2.5 (7B)"} - {loadingProgress}%
             </p>
             <p className="text-xs text-gray-500 mt-2">
-              First load ~2GB. Model will be cached for future visits.
+              First load {selectedModel.includes("3B") ? "~2GB" : "~4GB"}. Model will be cached for future visits.
             </p>
           </div>
         )}
