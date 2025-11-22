@@ -40,14 +40,23 @@ body {
   }
   
   .bg-dither {
-    background-image: radial-gradient(#000000 1px, transparent 1px);
+    background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
     background-size: 4px 4px;
-    opacity: 0.1;
   }
   
   .bg-dither-heavy {
     background-image: radial-gradient(#000000 1.5px, transparent 1.5px);
     background-size: 3px 3px;
+  }
+
+  .bg-stripes {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      #000000 2px,
+      #000000 4px
+    );
   }
 }
 

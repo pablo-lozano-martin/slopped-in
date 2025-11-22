@@ -11,7 +11,7 @@ import SlopMeter from "@/components/SlopMeter";
 import ModelSelector from "@/components/ModelSelector";
 import { useWebLLM } from "@/hooks/useWebLLM";
 import { Paper } from "@/types";
-import { Sparkles, Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, Minus, X, Square } from "lucide-react";
 
 export default function Home() {
   const [papers, setPapers] = useState<Paper[]>([]);
@@ -21,6 +21,7 @@ export default function Home() {
   const [searchError, setSearchError] = useState<string | null>(null);
   const [slopLevel, setSlopLevel] = useState(3);
   const [selectedModel, setSelectedModel] = useState("Qwen2.5-3B-Instruct-q4f16_1-MLC");
+  const [hoverInfo, setHoverInfo] = useState<string | null>(null);
 
   const { engineState, loadingProgress, error: engineError, generatePost } = useWebLLM(selectedModel);
 
@@ -68,97 +69,138 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-retro-gray py-12 px-4 font-mono">
-      <div className="max-w-7xl mx-auto">
-        <header className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="w-10 h-10 text-retro-red" />
-            <h1 className="text-5xl font-bold text-black uppercase tracking-widest">Slopped-in</h1>
+    <div className="h-screen bg-retro-gray p-4 font-mono bg-dither flex flex-col overflow-hidden">
+      <div className="w-full h-full max-w-[1600px] mx-auto border-2 border-black bg-white shadow-retro flex flex-col relative">
+        {/* Window Title Bar */}
+        <div className="border-b-2 border-black bg-white p-1 flex items-center justify-between shrink-0 select-none">
+          <div className="flex-1 h-8 bg-stripes flex items-center px-2 overflow-hidden">
+            <span className="bg-white px-4 text-lg font-bold uppercase tracking-widest border-2 border-black shadow-sm whitespace-nowrap">
+              SYSTEM_V1.0 // SLOPPED-IN.EXE
+            </span>
           </div>
-          <p className="text-xl text-black max-w-2xl mx-auto border-2 border-black bg-white p-2 shadow-retro inline-block">
-            Transform ArXiv papers into viral LinkedIn posts using local AI
-          </p>
-        </header>
-
-        <ModelSelector
-          value={selectedModel}
-          onChange={setSelectedModel}
-          disabled={engineState === "loading"}
-        />
-
-        {engineState === "loading" && (
-          <div className="max-w-2xl mx-auto mb-8 p-6 bg-white border-2 border-black shadow-retro">
-            <div className="flex items-center gap-3 mb-3">
-              <Loader2 className="w-6 h-6 text-black animate-spin" />
-              <h3 className="font-semibold text-lg uppercase tracking-wider">Loading AI Model</h3>
-            </div>
-            <div className="w-full bg-dither border-2 border-black h-6 mb-2 p-1">
-              <div
-                className="bg-retro-red h-full transition-all duration-300"
-                style={{ width: `${loadingProgress}%` }}
-              />
-            </div>
-            <p className="text-sm text-black">
-              Downloading {selectedModel.includes("3B") ? "Qwen 2.5 (3B)" : "Qwen 2.5 (7B)"} - {loadingProgress}%
-            </p>
-            <p className="text-xs text-gray-500 mt-2">
-              First load {selectedModel.includes("3B") ? "~2GB" : "~4GB"}. Model will be cached for future visits.
-            </p>
+          <div className="flex gap-1 ml-2 pl-2 bg-white">
+            <button className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center hover:bg-black hover:text-white transition-colors">
+              <Minus className="w-5 h-5" />
+            </button>
+            <button className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center hover:bg-black hover:text-white transition-colors">
+              <Square className="w-4 h-4" />
+            </button>
+            <button className="w-8 h-8 border-2 border-black bg-retro-red flex items-center justify-center text-white hover:bg-red-700 transition-colors">
+              <X className="w-5 h-5" />
+            </button>
           </div>
-        )}
+        </div>
 
-        {engineState === "error" && engineError && (
-          <div className="max-w-2xl mx-auto mb-8 p-6 bg-white border-2 border-black shadow-retro">
-            <div className="flex items-center gap-3">
-              <AlertCircle className="w-6 h-6 text-black" />
-              <div>
-                <h3 className="font-semibold text-lg text-black uppercase tracking-wider">Error</h3>
-                <p className="text-sm text-black">{engineError}</p>
-                <p className="text-xs text-gray-600 mt-2">
-                  WebGPU is required. Try Chrome or Edge on desktop.
-                </p>
+        {/* Main VST Interface */}
+        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+          
+          {/* LEFT PANEL: INPUTS & CONTROLS */}
+          <div className="lg:w-[450px] xl:w-[500px] flex flex-col border-r-2 border-black bg-gray-50 shrink-0">
+            
+            {/* Header & Search (Fixed Top) */}
+            <div className="p-4 border-b-2 border-black bg-white z-10">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h1 className="text-3xl font-bold text-black uppercase tracking-tighter leading-none mb-1" style={{ textShadow: '2px 2px 0px #e0e0e0' }}>
+                    SLOPPED-IN
+                  </h1>
+                  <p className="text-[10px] uppercase tracking-widest text-gray-500">Viral Post Generator Module</p>
+                </div>
+                
+                {/* Compact Status Indicator */}
+                <div className="flex flex-col items-end gap-2">
+                   <div className="flex items-center gap-2">
+                      {/* Info Display Box */}
+                      <div className="h-6 px-2 border border-black bg-white text-black flex items-center min-w-[140px] justify-end">
+                        <span className="text-[10px] font-bold uppercase tracking-wider whitespace-nowrap overflow-hidden">
+                          {hoverInfo ? hoverInfo : 
+                           engineState === 'loading' ? `DOWNLOADING... ${Math.round(loadingProgress)}%` :
+                           engineState === 'generating' ? 'INFERENCE RUNNING' :
+                           engineState === 'ready' ? 'SYSTEM READY' : 'WAITING FOR INPUT'}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider border border-black px-2 py-1 bg-gray-50 h-6">
+                          <div className={`w-1.5 h-1.5 border border-black ${engineState === 'loading' || engineState === 'generating' ? 'bg-retro-red animate-pulse' : engineState === 'ready' ? 'bg-black' : 'bg-transparent'}`} />
+                          <span>{engineState === 'loading' ? 'INIT' : engineState === 'generating' ? 'BUSY' : engineState === 'ready' ? 'READY' : 'IDLE'}</span>
+                      </div>
+                   </div>
+                   {engineState === 'loading' && (
+                      <div className="w-full h-1 border border-black bg-white">
+                        <div className="h-full bg-retro-red transition-all duration-300" style={{ width: `${loadingProgress}%` }} />
+                      </div>
+                   )}
+                </div>
               </div>
+
+              <SearchBar onSearch={handleSearch} isLoading={isSearching} onHover={setHoverInfo} />
+              
+              {searchError && (
+                <div className="mt-2 p-2 border-2 border-black bg-white shadow-retro text-xs text-retro-red font-bold uppercase">
+                  Error: {searchError}
+                </div>
+               )}
+            </div>
+
+            {/* Results List (Scrollable Middle) */}
+            <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+               <ResultsGrid
+                  papers={papers}
+                  selectedPaper={selectedPaper}
+                  onSelectPaper={handleSelectPaper}
+                />
+            </div>
+
+            {/* Controls Footer (Fixed Bottom) */}
+            <div className="p-4 border-t-2 border-black bg-white">
+               <div className="flex gap-4">
+                 <div className="w-1/2">
+                    <ModelSelector
+                      value={selectedModel}
+                      onChange={setSelectedModel}
+                      onHover={setHoverInfo}
+                      disabled={engineState === "loading"}
+                    />
+                 </div>
+                 <div className="w-1/2">
+                    <SlopMeter
+                      value={slopLevel}
+                      onChange={setSlopLevel}
+                      onHover={setHoverInfo}
+                      disabled={engineState === "generating"}
+                    />
+                 </div>
+               </div>
+               
+               <button
+                  onClick={handleGenerate}
+                  onMouseEnter={() => setHoverInfo("INITIATE GENERATION SEQUENCE")}
+                  onMouseLeave={() => setHoverInfo(null)}
+                  disabled={engineState !== "ready" || !selectedPaper}
+                  className="w-full py-3 bg-retro-red text-white text-lg font-bold border-2 border-black hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px] uppercase tracking-widest flex items-center justify-center gap-2"
+                >
+                  {engineState === "generating" ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      PROCESSING
+                    </>
+                  ) : (
+                    "GENERATE"
+                  )}
+                </button>
             </div>
           </div>
-        )}
 
-        <SearchBar onSearch={handleSearch} isLoading={isSearching} />
-
-        {searchError && (
-          <div className="max-w-2xl mx-auto mt-4 p-4 bg-white border-2 border-black shadow-retro">
-            <p className="text-sm text-black">{searchError}</p>
+          {/* RIGHT PANEL: PREVIEW SCREEN */}
+          <div className="flex-1 bg-gray-100 p-4 lg:p-8 flex flex-col overflow-hidden relative">
+             <div className="absolute inset-0 bg-dither opacity-50 pointer-events-none"></div>
+             <PostPreview
+                content={generatedPost}
+                isGenerating={engineState === "generating"}
+              />
           </div>
-        )}
 
-        <ResultsGrid
-          papers={papers}
-          selectedPaper={selectedPaper}
-          onSelectPaper={handleSelectPaper}
-        />
-
-        {selectedPaper && (
-          <>
-            <SlopMeter
-              value={slopLevel}
-              onChange={setSlopLevel}
-              disabled={engineState === "generating"}
-            />
-            <div className="w-full max-w-2xl mx-auto mb-8">
-              <button
-                onClick={handleGenerate}
-                disabled={engineState !== "ready"}
-                className="w-full px-6 py-3 bg-retro-red text-white font-semibold border-2 border-black hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px] uppercase tracking-wider"
-              >
-                {engineState === "generating" ? "Generating..." : "Generate Post"}
-              </button>
-            </div>
-          </>
-        )}
-
-        <PostPreview
-          content={generatedPost}
-          isGenerating={engineState === "generating"}
-        />
+        </div>
       </div>
     </div>
   );

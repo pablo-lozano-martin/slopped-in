@@ -8,17 +8,18 @@ import { FormEvent, useState } from "react";
 
 interface SearchBarProps {
   onSearch: (query: string, yearFilter: string) => void;
+  onHover?: (text: string | null) => void;
   isLoading: boolean;
 }
 
-export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
+export default function SearchBar({ onSearch, onHover, isLoading }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState("all");
 
   const yearOptions = [
-    { value: "all", label: "All Years" },
-    { value: "year", label: "Last Year" },
-    { value: "month", label: "Last Month" },
+    { value: "all", label: "All Years", tooltip: "SEARCH ALL TIME" },
+    { value: "year", label: "Last Year", tooltip: "SEARCH PAST 12 MONTHS" },
+    { value: "month", label: "Last Month", tooltip: "SEARCH PAST 30 DAYS" },
   ];
 
   const handleSubmit = (e: FormEvent) => {
@@ -35,6 +36,8 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onMouseEnter={() => onHover?.("ENTER RESEARCH TOPIC")}
+          onMouseLeave={() => onHover?.(null)}
           placeholder="Enter a technical topic (e.g., 'Optimizing LLM inference')"
           disabled={isLoading}
           className="retro-input w-full px-6 py-4 pr-14 text-lg disabled:bg-dither disabled:cursor-not-allowed"
@@ -42,6 +45,8 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
         <button
           type="submit"
           disabled={isLoading || !query.trim()}
+          onMouseEnter={() => onHover?.("EXECUTE SEARCH QUERY")}
+          onMouseLeave={() => onHover?.(null)}
           className="absolute right-2 top-1/2 -translate-y-1/2 p-2 border-2 border-black bg-retro-red text-white hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
         >
           <Search className="w-6 h-6" />
@@ -53,6 +58,8 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
             key={option.value}
             type="button"
             onClick={() => setSelectedYear(option.value)}
+            onMouseEnter={() => onHover?.(option.tooltip)}
+            onMouseLeave={() => onHover?.(null)}
             disabled={isLoading}
             className={`px-4 py-2 border-2 border-black font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
               selectedYear === option.value

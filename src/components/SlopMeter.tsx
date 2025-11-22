@@ -6,32 +6,37 @@
 interface SlopMeterProps {
   value: number;
   onChange: (value: number) => void;
+  onHover?: (text: string | null) => void;
   disabled?: boolean;
 }
 
-export default function SlopMeter({ value, onChange, disabled }: SlopMeterProps) {
+export default function SlopMeter({ value, onChange, onHover, disabled }: SlopMeterProps) {
   const labels = ["Academic", "Balanced", "Engaging", "Catchy", "Viral"];
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-6 mt-8">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-black uppercase tracking-wider">Style:</span>
-        <span className="text-sm font-bold text-retro-red uppercase tracking-wider border-2 border-black px-2 py-1 bg-white shadow-retro">{labels[value - 1]}</span>
+    <div className="w-full mb-4">
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-xs font-bold text-black uppercase tracking-wider">Style</span>
+        <span className="text-[10px] font-bold text-retro-red uppercase tracking-wider border border-black px-1 bg-white">{labels[value - 1]}</span>
       </div>
-      <input
-        type="range"
-        min="1"
-        max="5"
-        step="1"
-        value={value}
-        onChange={(e) => onChange(parseInt(e.target.value))}
-        disabled={disabled}
-        className="w-full h-4 bg-gray-200 border-2 border-black appearance-none cursor-pointer accent-retro-red disabled:opacity-50 disabled:cursor-not-allowed"
-      />
-      <div className="flex justify-between mt-1 px-1">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className={`w-0.5 h-2 ${i <= value ? 'bg-retro-red' : 'bg-black'}`}></div>
-        ))}
+      <div className="relative h-6 flex items-center">
+        <input
+          type="range"
+          min="1"
+          max="5"
+          step="1"
+          value={value}
+          onChange={(e) => onChange(parseInt(e.target.value))}
+          onMouseEnter={() => onHover?.("ADJUST SLOP LEVEL (1-5)")}
+          onMouseLeave={() => onHover?.(null)}
+          disabled={disabled}
+          className="w-full h-2 bg-gray-200 border border-black appearance-none cursor-pointer accent-retro-red disabled:opacity-50 disabled:cursor-not-allowed z-10 relative"
+        />
+        <div className="absolute inset-0 flex justify-between px-1 pointer-events-none">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className={`w-0.5 h-full ${i <= value ? 'bg-retro-red/20' : 'bg-black/10'}`}></div>
+          ))}
+        </div>
       </div>
     </div>
   );
