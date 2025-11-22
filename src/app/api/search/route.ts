@@ -4,6 +4,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { XMLParser } from "fast-xml-parser";
 
+function formatArxivDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}${month}${day}0000`;
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("q");
@@ -17,9 +24,27 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const arxivUrl = `http://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(
-      query
-    )}&start=0&max_results=10&sortBy=relevance`;
+    let searchQuery = `all:${query}`;
+
+    if (yearFilter !== "all") {
+      const today = new Date();
+      const startDate = new Date();
+
+      if (yearFilter === "month") {
+        startDate.setMonth(startDate.getMonth() - 1);
+      } else if (yearFilter === "year") {
+        startDate.setFullYear(startDate.getFullYear() - 1);
+      }
+
+      const fromDate = formatArxivDate(startDate);
+      const toDate = formatArxivDate(today);
+
+      searchQuery = `all:${query} AND submittedDate:[${fromDate} TO ${toDate}]`;
+    }
+
+    const arxivUrl = `http://export.arxiv.org/api/query?search_query=${encodeURIComponent(
+      searchQuery
+    )}&start=0&max_results=3&sortBy=relevance`;
 
     const response = await fetch(arxivUrl);
 
@@ -42,7 +67,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ papers: [] });
     }
 
-    let papers = (Array.isArray(entries) ? entries : [entries]).map((entry: any) => ({
+    const papers = (Array.isArray(entries) ? entries : [entries]).map((entry: any) => ({
       title: entry.title?.replace(/\s+/g, " ").trim() || "",
       summary: entry.summary?.replace(/\s+/g, " ").trim() || "",
       published: entry.published || "",
@@ -52,22 +77,7 @@ export async function GET(request: NextRequest) {
       link: entry.id || "",
     }));
 
-    if (yearFilter !== "all") {
-      const cutoffDate = new Date();
-
-      if (yearFilter === "month") {
-        cutoffDate.setMonth(cutoffDate.getMonth() - 1);
-      } else if (yearFilter === "year") {
-        cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
-      }
-
-      papers = papers.filter((paper) => {
-        const publishedDate = new Date(paper.published);
-        return publishedDate >= cutoffDate;
-      });
-    }
-
-    return NextResponse.json({ papers: papers.slice(0, 3) });
+    return NextResponse.json({ papers });
   } catch (error) {
     console.error("ArXiv API Error:", error);
     return NextResponse.json(
