@@ -7,6 +7,7 @@ import { XMLParser } from "fast-xml-parser";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("q");
+  const yearFilter = searchParams.get("years") || "all";
 
   if (!query) {
     return NextResponse.json(
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
   try {
     const arxivUrl = `http://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(
       query
-    )}&start=0&max_results=3&sortBy=relevance`;
+    )}&start=0&max_results=10&sortBy=relevance`;
 
     const response = await fetch(arxivUrl);
 
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ papers: [] });
     }
 
-    const papers = (Array.isArray(entries) ? entries : [entries]).map((entry: any) => ({
+    let papers = (Array.isArray(entries) ? entries : [entries]).map((entry: any) => ({
       title: entry.title?.replace(/\s+/g, " ").trim() || "",
       summary: entry.summary?.replace(/\s+/g, " ").trim() || "",
       published: entry.published || "",
@@ -51,7 +52,18 @@ export async function GET(request: NextRequest) {
       link: entry.id || "",
     }));
 
-    return NextResponse.json({ papers });
+    if (yearFilter !== "all") {
+      const yearsBack = parseInt(yearFilter);
+      const cutoffDate = new Date();
+      cutoffDate.setFullYear(cutoffDate.getFullYear() - yearsBack);
+
+      papers = papers.filter((paper) => {
+        const publishedDate = new Date(paper.published);
+        return publishedDate >= cutoffDate;
+      });
+    }
+
+    return NextResponse.json({ papers: papers.slice(0, 3) });
   } catch (error) {
     console.error("ArXiv API Error:", error);
     return NextResponse.json(

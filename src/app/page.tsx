@@ -20,7 +20,7 @@ export default function Home() {
 
   const { engineState, loadingProgress, error: engineError, generatePost } = useWebLLM();
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = async (query: string, yearFilter: string) => {
     setIsSearching(true);
     setSearchError(null);
     setPapers([]);
@@ -28,7 +28,9 @@ export default function Home() {
     setGeneratedPost("");
 
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      const response = await fetch(
+        `/api/search?q=${encodeURIComponent(query)}&years=${yearFilter}`
+      );
       const data = await response.json();
 
       if (!response.ok) {

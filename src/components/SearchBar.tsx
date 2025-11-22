@@ -1,5 +1,5 @@
 // ABOUTME: Search input component for entering research topics
-// ABOUTME: Handles query submission and loading states
+// ABOUTME: Handles query submission, loading states, and year filtering
 
 "use client";
 
@@ -7,23 +7,32 @@ import { Search } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 interface SearchBarProps {
-  onSearch: (query: string) => void;
+  onSearch: (query: string, yearFilter: string) => void;
   isLoading: boolean;
 }
 
 export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
   const [query, setQuery] = useState("");
+  const [selectedYear, setSelectedYear] = useState("all");
+
+  const currentYear = new Date().getFullYear();
+  const yearOptions = [
+    { value: "all", label: "All Years" },
+    { value: "1", label: "Last Year" },
+    { value: "2", label: "Last 2 Years" },
+    { value: "5", label: "Last 5 Years" },
+  ];
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      onSearch(query.trim());
+      onSearch(query.trim(), selectedYear);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
-      <div className="relative">
+      <div className="relative mb-4">
         <input
           type="text"
           value={query}
@@ -39,6 +48,23 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
         >
           <Search className="w-6 h-6" />
         </button>
+      </div>
+      <div className="flex gap-2 justify-center flex-wrap">
+        {yearOptions.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => setSelectedYear(option.value)}
+            disabled={isLoading}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+              selectedYear === option.value
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+          >
+            {option.label}
+          </button>
+        ))}
       </div>
     </form>
   );
