@@ -22,7 +22,7 @@ export function useWebLLM() {
           throw new Error("WebGPU is not supported in this browser");
         }
 
-        const engine = await CreateMLCEngine("Qwen2.5-1.5B-Instruct-q4f16_1-MLC", {
+        const engine = await CreateMLCEngine("Qwen2.5-3B-Instruct-q4f16_1-MLC", {
           initProgressCallback: (progress) => {
             if (mounted) {
               setLoadingProgress(Math.round(progress.progress * 100));

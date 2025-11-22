@@ -86,10 +86,10 @@ export default function Home() {
               />
             </div>
             <p className="text-sm text-gray-600">
-              Downloading Qwen 2.5 (1.5B) - {loadingProgress}%
+              Downloading Qwen 2.5 (3B) - {loadingProgress}%
             </p>
             <p className="text-xs text-gray-500 mt-2">
-              First load may take a few minutes. Model will be cached for future visits.
+              First load ~2GB. Model will be cached for future visits.
             </p>
           </div>
         )}
