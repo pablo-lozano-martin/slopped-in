@@ -15,12 +15,10 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState("all");
 
-  const currentYear = new Date().getFullYear();
   const yearOptions = [
     { value: "all", label: "All Years" },
-    { value: "1", label: "Last Year" },
-    { value: "2", label: "Last 2 Years" },
-    { value: "5", label: "Last 5 Years" },
+    { value: "year", label: "Last Year" },
+    { value: "month", label: "Last Month" },
   ];
 
   const handleSubmit = (e: FormEvent) => {

@@ -53,9 +53,13 @@ export async function GET(request: NextRequest) {
     }));
 
     if (yearFilter !== "all") {
-      const yearsBack = parseInt(yearFilter);
       const cutoffDate = new Date();
-      cutoffDate.setFullYear(cutoffDate.getFullYear() - yearsBack);
+
+      if (yearFilter === "month") {
+        cutoffDate.setMonth(cutoffDate.getMonth() - 1);
+      } else if (yearFilter === "year") {
+        cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
+      }
 
       papers = papers.filter((paper) => {
         const publishedDate = new Date(paper.published);
