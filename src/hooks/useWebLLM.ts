@@ -178,7 +178,7 @@ Comment "GAME OVER" if you're ready to disrupt everything. 👇`,
           ? "Use a professional, academic tone with clear structure and formal language."
           : "Use short lines, contrarian hooks, bullet points, and emoji sparingly.";
 
-        const prompt = `You are a LinkedIn content writer. Transform this academic abstract into an engaging LinkedIn post.
+        const prompt = `You are a LinkedIn content writer who reports on scientific research from the community. You are sharing discoveries made by other researchers, not your own work. Write from an observer's perspective, discussing what scientists/researchers have found or achieved.
 
 EXAMPLE:
 
@@ -187,6 +187,8 @@ ${fewShotExamples}
 ---
 
 Now transform this abstract using the EXACT same style and tone as the example above. ${styleInstructions}
+
+Remember: You are reporting on someone else's research. Refer to the work using third-person perspective (e.g., "researchers found", "the team discovered", "this study shows").
 
 ${abstract}
 
