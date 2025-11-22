@@ -21,7 +21,7 @@ export default function ResultsGrid({
 
   return (
     <div className="w-full max-w-6xl mx-auto mt-8">
-      <h2 className="text-2xl font-bold mb-6">Top 3 Papers</h2>
+      <h2 className="text-2xl font-bold mb-6 uppercase tracking-wider border-b-2 border-black pb-2 inline-block">Top 3 Papers</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {papers.map((paper, index) => (
           <PaperCard

@@ -14,6 +14,18 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'retro-gray': '#e0e0e0',
+        'retro-white': '#ffffff',
+        'retro-red': '#FF2A2A',
+      },
+      fontFamily: {
+        mono: ['var(--font-vt323)', 'monospace'],
+      },
+      boxShadow: {
+        'retro': '4px 4px 0px 0px #000000',
+      },
+      borderWidth: {
+        'DEFAULT': '2px',
       },
     },
   },

@@ -68,14 +68,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-retro-gray py-12 px-4 font-mono">
       <div className="max-w-7xl mx-auto">
         <header className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="w-10 h-10 text-blue-600" />
-            <h1 className="text-5xl font-bold text-gray-900">Slopped-in</h1>
+            <Sparkles className="w-10 h-10 text-retro-red" />
+            <h1 className="text-5xl font-bold text-black uppercase tracking-widest">Slopped-in</h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-black max-w-2xl mx-auto border-2 border-black bg-white p-2 shadow-retro inline-block">
             Transform ArXiv papers into viral LinkedIn posts using local AI
           </p>
         </header>
@@ -87,18 +87,18 @@ export default function Home() {
         />
 
         {engineState === "loading" && (
-          <div className="max-w-2xl mx-auto mb-8 p-6 bg-blue-50 border-2 border-blue-200 rounded-lg">
+          <div className="max-w-2xl mx-auto mb-8 p-6 bg-white border-2 border-black shadow-retro">
             <div className="flex items-center gap-3 mb-3">
-              <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
-              <h3 className="font-semibold text-lg">Loading AI Model</h3>
+              <Loader2 className="w-6 h-6 text-black animate-spin" />
+              <h3 className="font-semibold text-lg uppercase tracking-wider">Loading AI Model</h3>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div className="w-full bg-dither border-2 border-black h-6 mb-2 p-1">
               <div
-                className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                className="bg-retro-red h-full transition-all duration-300"
                 style={{ width: `${loadingProgress}%` }}
               />
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-black">
               Downloading {selectedModel.includes("3B") ? "Qwen 2.5 (3B)" : "Qwen 2.5 (7B)"} - {loadingProgress}%
             </p>
             <p className="text-xs text-gray-500 mt-2">
@@ -108,13 +108,13 @@ export default function Home() {
         )}
 
         {engineState === "error" && engineError && (
-          <div className="max-w-2xl mx-auto mb-8 p-6 bg-red-50 border-2 border-red-200 rounded-lg">
+          <div className="max-w-2xl mx-auto mb-8 p-6 bg-white border-2 border-black shadow-retro">
             <div className="flex items-center gap-3">
-              <AlertCircle className="w-6 h-6 text-red-600" />
+              <AlertCircle className="w-6 h-6 text-black" />
               <div>
-                <h3 className="font-semibold text-lg text-red-900">Error</h3>
-                <p className="text-sm text-red-700">{engineError}</p>
-                <p className="text-xs text-red-600 mt-2">
+                <h3 className="font-semibold text-lg text-black uppercase tracking-wider">Error</h3>
+                <p className="text-sm text-black">{engineError}</p>
+                <p className="text-xs text-gray-600 mt-2">
                   WebGPU is required. Try Chrome or Edge on desktop.
                 </p>
               </div>
@@ -125,8 +125,8 @@ export default function Home() {
         <SearchBar onSearch={handleSearch} isLoading={isSearching} />
 
         {searchError && (
-          <div className="max-w-2xl mx-auto mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <p className="text-sm text-yellow-800">{searchError}</p>
+          <div className="max-w-2xl mx-auto mt-4 p-4 bg-white border-2 border-black shadow-retro">
+            <p className="text-sm text-black">{searchError}</p>
           </div>
         )}
 
@@ -147,7 +147,7 @@ export default function Home() {
               <button
                 onClick={handleGenerate}
                 disabled={engineState !== "ready"}
-                className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="w-full px-6 py-3 bg-retro-red text-white font-semibold border-2 border-black hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px] uppercase tracking-wider"
               >
                 {engineState === "generating" ? "Generating..." : "Generate Post"}
               </button>

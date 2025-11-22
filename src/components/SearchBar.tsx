@@ -37,12 +37,12 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Enter a technical topic (e.g., 'Optimizing LLM inference')"
           disabled={isLoading}
-          className="w-full px-6 py-4 pr-14 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+          className="retro-input w-full px-6 py-4 pr-14 text-lg disabled:bg-dither disabled:cursor-not-allowed"
         />
         <button
           type="submit"
           disabled={isLoading || !query.trim()}
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 border-2 border-black bg-retro-red text-white hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
         >
           <Search className="w-6 h-6" />
         </button>
@@ -54,10 +54,10 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
             type="button"
             onClick={() => setSelectedYear(option.value)}
             disabled={isLoading}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`px-4 py-2 border-2 border-black font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
               selectedYear === option.value
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                ? "bg-retro-red text-white shadow-retro"
+                : "bg-white text-black hover:bg-gray-100"
             }`}
           >
             {option.label}

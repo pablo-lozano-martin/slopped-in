@@ -17,7 +17,7 @@ export default function ModelSelector({ value, onChange, disabled }: ModelSelect
 
   return (
     <div className="w-full max-w-2xl mx-auto mb-6">
-      <label className="block text-sm font-medium text-gray-700 mb-2">AI Model:</label>
+      <label className="block text-sm font-medium text-black mb-2 uppercase tracking-wider">AI Model:</label>
       <div className="flex gap-3">
         {models.map((model) => (
           <button
@@ -25,14 +25,14 @@ export default function ModelSelector({ value, onChange, disabled }: ModelSelect
             type="button"
             onClick={() => onChange(model.id)}
             disabled={disabled}
-            className={`flex-1 px-4 py-3 rounded-lg border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`flex-1 px-4 py-3 border-2 border-black transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
               value === model.id
-                ? "border-blue-600 bg-blue-50 text-blue-900"
-                : "border-gray-300 hover:border-blue-400"
+                ? "bg-retro-red text-white shadow-retro"
+                : "bg-white hover:bg-gray-50"
             }`}
           >
             <div className="font-semibold">{model.label}</div>
-            <div className="text-xs text-gray-500 mt-1">{model.size}</div>
+            <div className={`text-xs mt-1 ${value === model.id ? "text-white" : "text-gray-500"}`}>{model.size}</div>
           </button>
         ))}
       </div>

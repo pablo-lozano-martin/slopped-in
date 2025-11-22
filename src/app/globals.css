@@ -3,25 +3,55 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #e0e0e0;
+  --foreground: #000000;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-vt323), monospace;
+  -webkit-font-smoothing: none;
+}
+
+@layer components {
+  .retro-container {
+    @apply border-2 border-black bg-white shadow-retro;
+  }
+  
+  .retro-input {
+    @apply border-2 border-black bg-white p-2 font-mono shadow-none outline-none focus:shadow-retro transition-shadow;
+    caret-shape: block; /* Experimental */
+  }
+  
+  /* Custom caret animation if caret-shape isn't supported well enough or for more control */
+  .retro-input:focus {
+    animation: blink-caret 1s step-end infinite;
+  }
+
+  .retro-btn {
+    @apply border-2 border-black bg-white px-4 py-2 font-mono shadow-retro active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all hover:bg-gray-50;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+  
+  .bg-dither {
+    background-image: radial-gradient(#000000 1px, transparent 1px);
+    background-size: 4px 4px;
+    opacity: 0.1;
+  }
+  
+  .bg-dither-heavy {
+    background-image: radial-gradient(#000000 1.5px, transparent 1.5px);
+    background-size: 3px 3px;
+  }
+}
+
+@keyframes blink-caret {
+    0%, 100% { caret-color: black; }
+    50% { caret-color: transparent; }
 }

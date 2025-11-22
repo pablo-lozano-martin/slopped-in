@@ -15,8 +15,8 @@ export default function SlopMeter({ value, onChange, disabled }: SlopMeterProps)
   return (
     <div className="w-full max-w-2xl mx-auto mb-6 mt-8">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-gray-600">Style:</span>
-        <span className="text-sm font-medium text-blue-600">{labels[value - 1]}</span>
+        <span className="text-sm text-black uppercase tracking-wider">Style:</span>
+        <span className="text-sm font-bold text-retro-red uppercase tracking-wider border-2 border-black px-2 py-1 bg-white shadow-retro">{labels[value - 1]}</span>
       </div>
       <input
         type="range"
@@ -26,8 +26,13 @@ export default function SlopMeter({ value, onChange, disabled }: SlopMeterProps)
         value={value}
         onChange={(e) => onChange(parseInt(e.target.value))}
         disabled={disabled}
-        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full h-4 bg-gray-200 border-2 border-black appearance-none cursor-pointer accent-retro-red disabled:opacity-50 disabled:cursor-not-allowed"
       />
+      <div className="flex justify-between mt-1 px-1">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className={`w-0.5 h-2 ${i <= value ? 'bg-retro-red' : 'bg-black'}`}></div>
+        ))}
+      </div>
     </div>
   );
 }

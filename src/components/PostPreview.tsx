@@ -29,11 +29,11 @@ export default function PostPreview({ content, isGenerating }: PostPreviewProps)
   return (
     <div className="w-full max-w-2xl mx-auto mt-8">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">LinkedIn Post</h2>
+        <h2 className="text-2xl font-bold uppercase tracking-wider">LinkedIn Post</h2>
         {content && !isGenerating && (
           <button
             onClick={handleCopy}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 border-2 border-black bg-retro-red text-white hover:bg-red-600 transition-colors shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
           >
             {copied ? (
               <>
@@ -49,17 +49,17 @@ export default function PostPreview({ content, isGenerating }: PostPreviewProps)
           </button>
         )}
       </div>
-      <div className="p-6 border-2 border-gray-300 rounded-lg bg-white min-h-[300px]">
+      <div className="p-6 border-2 border-black bg-white min-h-[300px] shadow-retro">
         {isGenerating && !content && (
           <div className="flex items-center justify-center h-full">
-            <div className="animate-pulse text-gray-500">Generating post...</div>
+            <div className="animate-pulse text-retro-red uppercase tracking-widest">Generating post...</div>
           </div>
         )}
-        <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">
+        <div className="whitespace-pre-wrap text-black leading-relaxed font-mono">
           {content}
         </div>
         {isGenerating && content && (
-          <span className="inline-block w-2 h-5 bg-blue-600 animate-pulse ml-1" />
+          <span className="inline-block w-3 h-6 bg-retro-red animate-pulse ml-1 align-middle" />
         )}
       </div>
     </div>

@@ -22,23 +22,23 @@ export default function PaperCard({ paper, onSelect, isSelected }: PaperCardProp
   return (
     <div
       onClick={() => onSelect(paper)}
-      className={`p-6 border-2 rounded-lg cursor-pointer transition-all hover:shadow-lg ${
+      className={`p-6 border-2 border-black cursor-pointer transition-all hover:shadow-retro ${
         isSelected
-          ? "border-blue-600 bg-blue-50"
-          : "border-gray-300 hover:border-blue-400"
+          ? "bg-black text-white shadow-retro border-retro-red"
+          : "bg-white hover:bg-gray-50"
       }`}
     >
       <div className="flex items-start gap-3 mb-3">
-        <FileText className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+        <FileText className={`w-6 h-6 flex-shrink-0 mt-1 ${isSelected ? "text-retro-red" : "text-retro-red"}`} />
         <h3 className="font-semibold text-lg leading-tight">{paper.title}</h3>
       </div>
-      <p className="text-sm text-gray-600 mb-2">
+      <p className={`text-sm mb-2 ${isSelected ? "text-gray-300" : "text-gray-600"}`}>
         <span className="font-medium">Authors:</span> {paper.authors}
       </p>
-      <p className="text-sm text-gray-500 mb-3">
+      <p className={`text-sm mb-3 ${isSelected ? "text-gray-400" : "text-gray-500"}`}>
         <span className="font-medium">Published:</span> {formattedDate}
       </p>
-      <p className="text-sm text-gray-700 line-clamp-4">{paper.summary}</p>
+      <p className={`text-sm line-clamp-4 ${isSelected ? "text-gray-200" : "text-gray-700"}`}>{paper.summary}</p>
     </div>
   );
 }
