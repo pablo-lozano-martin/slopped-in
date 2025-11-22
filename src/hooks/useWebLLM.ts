@@ -58,44 +58,63 @@ export function useWebLLM() {
       setEngineState("generating");
 
       try {
-        const prompt = `ROLE: You are a Top Voice LinkedIn Ghostwriter and Viral Content Strategist. Your goal is to transform academic content into high-engagement, scroll-stopping LinkedIn posts.
+        const prompt = `You are a viral LinkedIn ghostwriter. Transform academic abstracts into scroll-stopping posts using "Bro-etry" style.
 
-CORE OBJECTIVE: Maximize Dwell Time and Engagement using "Bro-etry" formatting: short, punchy sentences with heavy line breaks.
+EXAMPLES:
 
-TONE & STYLE:
-- Authoritative but Accessible (plain English)
-- Slightly Contrarian (generate discussion)
-- Punchy (eliminate fluff, strong verbs)
-- Vulnerable/Human (admit failures to build trust)
+INPUT: "We propose a novel neural architecture that achieves state-of-the-art performance on ImageNet classification through attention mechanisms and residual connections."
 
-CRITICAL FORMATTING RULES:
-1. The Hook (Lines 1-2): First sentence MUST capture attention immediately (visible before "See more")
-2. White Space: Never write paragraphs longer than 2 lines. Ideally 1 sentence per line.
-3. Visuals: Use bullet points, numbered lists, or emojis to break up text
-4. No Jargon: Write at a 5th-grade reading level
+OUTPUT:
+AI just got 10x faster. ⚡
 
-HOOK STRATEGIES:
-- The Negative Hook: "Stop doing [X]." / "Most people get [Y] wrong."
-- The Numerical Hook: "I analyzed 1,000 profiles. Here is what I found:"
-- The Transformation: "How I went from [A] to [B] in [Timeframe]:"
-- The Listicle: "10 tools that feel illegal to know:"
-- The Contrarian: "Unpopular opinion: [Statement]."
+And nobody's talking about it.
 
-STRUCTURE:
-1. The Hook (1 sentence) - Provocative or high value
-2. The Re-Hook (1 sentence) - Validate the hook or add tension
-3. The Gap (Space) - Force the user to click "See more"
-4. The Body - Delivery of value. Short sentences. Steps. Stories.
-5. The Takeaway - One-sentence summary of the lesson
-6. The CTA - Ask a specific question to drive comments
+The secret?
+Stop thinking bigger models = better models.
 
-DO NOT:
-- Use long, academic paragraphs
-- Use hashtags in the middle of sentences
-- Be boring
-- Use passive voice
+Here's what actually works:
+→ Attention without the overhead
+→ Skip connections done right
+→ Less params, more punch
 
-Transform this academic abstract into a viral LinkedIn post following the rules above:
+Tested on 1M+ images.
+Beat every benchmark.
+
+The takeaway? Efficiency beats brute force.
+
+What's your take—should we chase scale or speed?
+
+---
+
+INPUT: "This paper investigates the effectiveness of large language models in code generation tasks, finding significant performance improvements when models are fine-tuned on domain-specific datasets."
+
+OUTPUT:
+I let AI write my code for 30 days.
+
+Here's what happened.
+
+Most devs think AI can't handle real work.
+They're wrong.
+
+The difference?
+Training on the RIGHT data.
+
+Generic models = generic code.
+Specialized models = production-ready solutions.
+
+3 things I learned:
+• Domain knowledge > model size
+• Fine-tuning beats prompting
+• Context is everything
+
+Bottom line: AI won't replace you.
+But developers using AI will replace those who don't.
+
+Are you adapting or resisting?
+
+---
+
+Now transform this abstract using the EXACT same style—short lines, contrarian hooks, bullet points, emoji sparingly:
 
 ${abstract}
 
