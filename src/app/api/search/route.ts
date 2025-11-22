@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   try {
     const arxivUrl = `http://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(
       query
-    )}&start=0&max_results=3&sortBy=submittedDate&sortOrder=descending`;
+    )}&start=0&max_results=3&sortBy=relevance`;
 
     const response = await fetch(arxivUrl);
 
