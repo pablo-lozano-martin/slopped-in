@@ -4,7 +4,7 @@
 "use client";
 
 import { Paper } from "@/types";
-import { FileText } from "lucide-react";
+import { FileText, ExternalLink } from "lucide-react";
 
 interface PaperCardProps {
   paper: Paper;
@@ -38,7 +38,22 @@ export default function PaperCard({ paper, onSelect, isSelected }: PaperCardProp
       <p className={`text-sm mb-3 ${isSelected ? "text-gray-400" : "text-gray-500"}`}>
         <span className="font-medium">Published:</span> {formattedDate}
       </p>
-      <p className={`text-sm line-clamp-4 ${isSelected ? "text-gray-200" : "text-gray-700"}`}>{paper.summary}</p>
+      <p className={`text-sm line-clamp-4 mb-4 ${isSelected ? "text-gray-200" : "text-gray-700"}`}>{paper.summary}</p>
+      
+      <a
+        href={paper.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase border-2 transition-colors ${
+          isSelected
+            ? "border-white text-white hover:bg-white hover:text-black"
+            : "border-black text-black hover:bg-black hover:text-white"
+        }`}
+      >
+        <ExternalLink className="w-3 h-3" />
+        Read Source
+      </a>
     </div>
   );
 }

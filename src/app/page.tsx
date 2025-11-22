@@ -3,7 +3,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "@/components/SearchBar";
 import ResultsGrid from "@/components/ResultsGrid";
 import PostPreview from "@/components/PostPreview";
@@ -22,8 +22,26 @@ export default function Home() {
   const [slopLevel, setSlopLevel] = useState(3);
   const [selectedModel, setSelectedModel] = useState("Qwen2.5-3B-Instruct-q4f16_1-MLC");
   const [hoverInfo, setHoverInfo] = useState<string | null>(null);
+  const [savedPosts, setSavedPosts] = useState<Record<string, string>>({});
 
   const { engineState, loadingProgress, error: engineError, generatePost } = useWebLLM(selectedModel);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("slopped-in-posts");
+    if (saved) {
+      try {
+        setSavedPosts(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse saved posts", e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(savedPosts).length > 0) {
+      localStorage.setItem("slopped-in-posts", JSON.stringify(savedPosts));
+    }
+  }, [savedPosts]);
 
   const handleSearch = async (query: string, yearFilter: string) => {
     setIsSearching(true);
@@ -52,7 +70,7 @@ export default function Home() {
 
   const handleSelectPaper = (paper: Paper) => {
     setSelectedPaper(paper);
-    setGeneratedPost("");
+    setGeneratedPost(savedPosts[paper.link] || "");
   };
 
   const handleGenerate = async () => {
@@ -60,9 +78,16 @@ export default function Home() {
 
     setGeneratedPost("");
     try {
-      await generatePost(selectedPaper.summary, slopLevel, (text) => {
+      const finalPost = await generatePost(selectedPaper.summary, slopLevel, (text) => {
         setGeneratedPost(text);
       });
+
+      if (finalPost) {
+        setSavedPosts((prev) => ({
+          ...prev,
+          [selectedPaper.link]: finalPost,
+        }));
+      }
     } catch (err) {
       console.error("Generation failed:", err);
     }
@@ -70,7 +95,7 @@ export default function Home() {
 
   return (
     <div className="h-screen bg-retro-gray p-4 font-mono bg-dither flex flex-col overflow-hidden">
-      <div className="w-full h-full max-w-[1600px] mx-auto border-2 border-black bg-white shadow-retro flex flex-col relative">
+      <div className="w-full h-full max-w-[1800px] mx-auto border-2 border-black bg-white shadow-retro flex flex-col relative">
         {/* Window Title Bar */}
         <div className="border-b-2 border-black bg-white p-1 flex items-center justify-between shrink-0 select-none">
           <div className="flex-1 h-8 bg-stripes flex items-center px-2 overflow-hidden">
@@ -95,24 +120,24 @@ export default function Home() {
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           
           {/* LEFT PANEL: INPUTS & CONTROLS */}
-          <div className="lg:w-[450px] xl:w-[500px] flex flex-col border-r-2 border-black bg-gray-50 shrink-0">
+          <div className="lg:w-[500px] xl:w-[550px] flex flex-col border-r-2 border-black bg-gray-50 shrink-0">
             
             {/* Header & Search (Fixed Top) */}
             <div className="p-4 border-b-2 border-black bg-white z-10">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h1 className="text-3xl font-bold text-black uppercase tracking-tighter leading-none mb-1" style={{ textShadow: '2px 2px 0px #e0e0e0' }}>
+                  <h1 className="text-5xl font-bold text-black uppercase tracking-tighter leading-none mb-1" style={{ textShadow: '3px 3px 0px #e0e0e0' }}>
                     SLOPPED-IN
                   </h1>
-                  <p className="text-[10px] uppercase tracking-widest text-gray-500">Viral Post Generator Module</p>
+                  <p className="text-xs uppercase tracking-widest text-gray-500">Viral Post Generator Module</p>
                 </div>
                 
                 {/* Compact Status Indicator */}
                 <div className="flex flex-col items-end gap-2">
                    <div className="flex items-center gap-2">
                       {/* Info Display Box */}
-                      <div className="h-6 px-2 border border-black bg-white text-black flex items-center min-w-[140px] justify-end">
-                        <span className="text-[10px] font-bold uppercase tracking-wider whitespace-nowrap overflow-hidden">
+                      <div className="h-8 px-3 border border-black bg-white text-black flex items-center min-w-[160px] justify-end">
+                        <span className="text-xs font-bold uppercase tracking-wider whitespace-nowrap overflow-hidden">
                           {hoverInfo ? hoverInfo : 
                            engineState === 'loading' ? `DOWNLOADING... ${Math.round(loadingProgress)}%` :
                            engineState === 'generating' ? 'INFERENCE RUNNING' :
@@ -120,8 +145,8 @@ export default function Home() {
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider border border-black px-2 py-1 bg-gray-50 h-6">
-                          <div className={`w-1.5 h-1.5 border border-black ${engineState === 'loading' || engineState === 'generating' ? 'bg-retro-red animate-pulse' : engineState === 'ready' ? 'bg-black' : 'bg-transparent'}`} />
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider border border-black px-2 py-1 bg-gray-50 h-8">
+                          <div className={`w-2 h-2 border border-black ${engineState === 'loading' || engineState === 'generating' ? 'bg-retro-red animate-pulse' : engineState === 'ready' ? 'bg-black' : 'bg-transparent'}`} />
                           <span>{engineState === 'loading' ? 'INIT' : engineState === 'generating' ? 'BUSY' : engineState === 'ready' ? 'READY' : 'IDLE'}</span>
                       </div>
                    </div>
@@ -177,11 +202,11 @@ export default function Home() {
                   onMouseEnter={() => setHoverInfo("INITIATE GENERATION SEQUENCE")}
                   onMouseLeave={() => setHoverInfo(null)}
                   disabled={engineState !== "ready" || !selectedPaper}
-                  className="w-full py-3 bg-retro-red text-white text-lg font-bold border-2 border-black hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px] uppercase tracking-widest flex items-center justify-center gap-2"
+                  className="w-full py-2 bg-retro-red text-white text-base font-bold border-2 border-black hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px] uppercase tracking-widest flex items-center justify-center gap-2"
                 >
                   {engineState === "generating" ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                       PROCESSING
                     </>
                   ) : (
@@ -194,10 +219,30 @@ export default function Home() {
           {/* RIGHT PANEL: PREVIEW SCREEN */}
           <div className="flex-1 bg-gray-100 p-4 lg:p-8 flex flex-col overflow-hidden relative">
              <div className="absolute inset-0 bg-dither opacity-50 pointer-events-none"></div>
-             <PostPreview
-                content={generatedPost}
-                isGenerating={engineState === "generating"}
-              />
+             
+             <div className="flex-1 min-h-0 flex flex-col z-10 mb-5">
+               <PostPreview
+                  content={generatedPost}
+                  isGenerating={engineState === "generating"}
+                />
+             </div>
+
+             {/* Credits / System Info */}
+             <div className="absolute bottom-3 left-5 right-5 flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest z-10 select-none">
+                <div className="flex gap-3">
+                    <span>© 2025 PABLO LOZANO</span>
+                    <span className="text-gray-300">|</span>
+                    <span>MADRID</span>
+                </div>
+                <a 
+                  href="https://pablo-lozano.vercel.app" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-retro-red transition-colors"
+                >
+                    PABLO-LOZANO.VERCEL.APP
+                </a>
+             </div>
           </div>
 
         </div>

@@ -30,7 +30,7 @@ export default function SlopMeter({ value, onChange, onHover, disabled }: SlopMe
           onMouseEnter={() => onHover?.("ADJUST SLOP LEVEL (1-5)")}
           onMouseLeave={() => onHover?.(null)}
           disabled={disabled}
-          className="w-full h-2 bg-gray-200 border border-black appearance-none cursor-pointer accent-retro-red disabled:opacity-50 disabled:cursor-not-allowed z-10 relative"
+          className="w-full h-2 bg-gray-200 border border-black appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed z-10 relative [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-retro-red [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-solid [&::-webkit-slider-thumb]:border-black [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:bg-retro-red [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-solid [&::-moz-range-thumb]:border-black [&::-moz-range-thumb]:rounded-none"
         />
         <div className="absolute inset-0 flex justify-between px-1 pointer-events-none">
           {[1, 2, 3, 4, 5].map((i) => (

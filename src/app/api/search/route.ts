@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     const arxivUrl = `http://export.arxiv.org/api/query?search_query=${encodeURIComponent(
       searchQuery
-    )}&start=0&max_results=3&sortBy=relevance`;
+    )}&start=0&max_results=10&sortBy=relevance`;
 
     const response = await fetch(arxivUrl);
 
