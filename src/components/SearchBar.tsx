@@ -38,7 +38,7 @@ export default function SearchBar({ onSearch, onHover, isLoading }: SearchBarPro
           onChange={(e) => setQuery(e.target.value)}
           onMouseEnter={() => onHover?.("ENTER RESEARCH TOPIC")}
           onMouseLeave={() => onHover?.(null)}
-          placeholder="Enter a technical topic (e.g., 'Optimizing LLM inference')"
+          placeholder="Enter a technical topic (e.g., 'LLM inference')"
           disabled={isLoading}
           className="retro-input w-full px-4 py-2 pr-12 text-base disabled:bg-dither disabled:cursor-not-allowed"
         />

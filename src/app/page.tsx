@@ -23,6 +23,7 @@ export default function Home() {
   const [selectedModel, setSelectedModel] = useState("Qwen2.5-3B-Instruct-q4f16_1-MLC");
   const [hoverInfo, setHoverInfo] = useState<string | null>(null);
   const [savedPosts, setSavedPosts] = useState<Record<string, string>>({});
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const { engineState, loadingProgress, error: engineError, generatePost } = useWebLLM(selectedModel);
 
@@ -94,17 +95,61 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen bg-retro-gray p-4 font-mono bg-dither flex flex-col overflow-hidden">
-      <div className="w-full h-full max-w-[1800px] mx-auto border-2 border-black bg-white shadow-retro flex flex-col relative">
+    <div className="h-screen bg-retro-gray p-4 font-mono bg-dither flex flex-col overflow-hidden relative">
+      
+      {/* Desktop Icon (Minimized State) */}
+      <div 
+        className={`absolute bottom-8 left-8 flex flex-col items-center gap-2 cursor-pointer group transition-all duration-300 ease-in-out ${
+          isMinimized ? "opacity-100 scale-100" : "opacity-0 scale-0 pointer-events-none"
+        }`}
+        onClick={() => setIsMinimized(false)}
+      >
+        <div className="w-16 h-16 bg-white border-2 border-black shadow-retro flex items-center justify-center group-hover:bg-retro-red group-hover:text-white transition-colors">
+           <svg width="40" height="40" viewBox="0 0 11 11" fill="currentColor" xmlns="http://www.w3.org/2000/svg" shapeRendering="crispEdges">
+             <rect x="4" y="3" width="1" height="1" />
+             <rect x="6" y="3" width="1" height="1" />
+             <rect x="3" y="6" width="1" height="1" />
+             <rect x="7" y="6" width="1" height="1" />
+             <rect x="3" y="7" width="5" height="1" />
+           </svg>
+        </div>
+        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">SLOPPED-IN.APP</span>
+      </div>
+
+      {/* Pablo App Icon (Minimized State) */}
+      <a 
+        href="https://pablo-lozano.vercel.app"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`absolute bottom-8 left-32 flex flex-col items-center gap-2 cursor-pointer group transition-all duration-300 ease-in-out ${
+          isMinimized ? "opacity-100 scale-100" : "opacity-0 scale-0 pointer-events-none"
+        }`}
+      >
+        <div className="w-16 h-16 bg-white border-2 border-black shadow-retro flex items-center justify-center group-hover:bg-retro-red group-hover:text-white transition-colors">
+           <svg width="40" height="40" viewBox="0 0 11 11" fill="currentColor" xmlns="http://www.w3.org/2000/svg" shapeRendering="crispEdges">
+             <rect x="3" y="5" width="1" height="1" />
+             <rect x="7" y="5" width="1" height="1" />
+             <rect x="3" y="7" width="5" height="1" />
+           </svg>
+        </div>
+        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">PABLO.APP</span>
+      </a>
+
+      <div className={`w-full h-full max-w-[1800px] mx-auto border-2 border-black bg-white shadow-retro flex flex-col relative transition-all duration-300 ease-in-out transform origin-bottom-left ${
+        isMinimized ? "scale-0 opacity-0 translate-y-[200px] pointer-events-none" : "scale-100 opacity-100 translate-y-0"
+      }`}>
         {/* Window Title Bar */}
         <div className="border-b-2 border-black bg-white p-1 flex items-center justify-between shrink-0 select-none">
           <div className="flex-1 h-8 bg-stripes flex items-center px-2 overflow-hidden">
             <span className="bg-white px-4 text-lg font-bold uppercase tracking-widest border-2 border-black shadow-sm whitespace-nowrap">
-              SYSTEM_V1.0 // SLOPPED-IN.EXE
+              SYSTEM_V1.0 // SLOPPED-IN.APP
             </span>
           </div>
           <div className="flex gap-1 ml-2 pl-2 bg-white">
-            <button className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center hover:bg-black hover:text-white transition-colors">
+            <button 
+              onClick={() => setIsMinimized(true)}
+              className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center hover:bg-black hover:text-white transition-colors"
+            >
               <Minus className="w-5 h-5" />
             </button>
             <button className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center hover:bg-black hover:text-white transition-colors">
