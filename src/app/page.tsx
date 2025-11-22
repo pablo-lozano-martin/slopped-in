@@ -47,22 +47,12 @@ export default function Home() {
     }
   };
 
-  const handleSelectPaper = async (paper: Paper) => {
+  const handleSelectPaper = (paper: Paper) => {
     setSelectedPaper(paper);
     setGeneratedPost("");
-
-    if (engineState === "ready") {
-      try {
-        await generatePost(paper.summary, slopLevel, (text) => {
-          setGeneratedPost(text);
-        });
-      } catch (err) {
-        console.error("Generation failed:", err);
-      }
-    }
   };
 
-  const handleRegeneratePost = async () => {
+  const handleGenerate = async () => {
     if (!selectedPaper || engineState !== "ready") return;
 
     setGeneratedPost("");
@@ -139,23 +129,22 @@ export default function Home() {
         />
 
         {selectedPaper && (
-          <SlopMeter
-            value={slopLevel}
-            onChange={async (newLevel) => {
-              setSlopLevel(newLevel);
-              if (engineState === "ready") {
-                setGeneratedPost("");
-                try {
-                  await generatePost(selectedPaper.summary, newLevel, (text) => {
-                    setGeneratedPost(text);
-                  });
-                } catch (err) {
-                  console.error("Generation failed:", err);
-                }
-              }
-            }}
-            disabled={engineState !== "ready"}
-          />
+          <>
+            <SlopMeter
+              value={slopLevel}
+              onChange={setSlopLevel}
+              disabled={engineState === "generating"}
+            />
+            <div className="w-full max-w-2xl mx-auto mb-8">
+              <button
+                onClick={handleGenerate}
+                disabled={engineState !== "ready"}
+                className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              >
+                {engineState === "generating" ? "Generating..." : "Generate Post"}
+              </button>
+            </div>
+          </>
         )}
 
         <PostPreview
