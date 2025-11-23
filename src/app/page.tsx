@@ -293,7 +293,7 @@ export default function Home() {
               {/* Subtitle Section */}
               <div className="w-full bg-gray-50 py-1 mb-4">
                  <div className="flex whitespace-nowrap px-1 justify-center">
-                    <span className="text-xs uppercase tracking-widest text-gray-500">Viral Post Generator Module (or how to turn serious papers into linked-in ai slop)</span>
+                    <span className="text-xs uppercase tracking-widest text-gray-500">Viral Post Generator Tool (or how to turn serious papers into linked-in ai slop)</span>
                  </div>
               </div>
 
