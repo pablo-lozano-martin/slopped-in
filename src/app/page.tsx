@@ -32,7 +32,7 @@ export default function Home() {
   const [arrowText, setArrowText] = useState("<<<");
   const [notification, setNotification] = useState<string | null>(null);
 
-  const slopLabels = ["Academic", "Balanced", "Engaging", "Catchy", "Viral"];
+  const slopLabels = ["Academic", "Balanced", "Catchy", "Viral", "Slop"];
   const { engineState, loadingProgress, error: engineError, generatePost, initializeEngine, deleteCache } = useWebLLM(selectedModel);
 
   useEffect(() => {
@@ -142,7 +142,7 @@ export default function Home() {
           setIsInfoOpen(false);
         }}
       >
-        <div className="w-16 h-16 bg-white border-2 border-black shadow-retro flex items-center justify-center group-hover:bg-retro-red group-hover:text-white transition-colors">
+        <div className="w-24 h-24 bg-white border-2 border-black shadow-retro flex items-center justify-center group-hover:bg-retro-red group-hover:text-white transition-colors">
            <svg width="40" height="40" viewBox="0 0 11 11" fill="currentColor" xmlns="http://www.w3.org/2000/svg" shapeRendering="crispEdges">
              <rect x="4" y="3" width="1" height="1" />
              <rect x="6" y="3" width="1" height="1" />
@@ -159,18 +159,18 @@ export default function Home() {
         href="https://pablo-lozano.vercel.app"
         target="_blank"
         rel="noopener noreferrer"
-        className={`absolute bottom-8 left-32 flex flex-col items-center gap-2 cursor-pointer group transition-all duration-300 ease-in-out ${
+        className={`absolute bottom-8 left-40 flex flex-col items-center gap-2 cursor-pointer group transition-all duration-300 ease-in-out ${
           isMinimized ? "opacity-100 scale-100" : "opacity-0 scale-0 pointer-events-none"
         }`}
       >
-        <div className="w-16 h-16 bg-white border-2 border-black shadow-retro flex items-center justify-center group-hover:bg-retro-red group-hover:text-white transition-colors">
+        <div className="w-24 h-24 bg-white border-2 border-black shadow-retro flex items-center justify-center group-hover:bg-retro-red group-hover:text-white transition-colors">
            <svg width="40" height="40" viewBox="0 0 11 11" fill="currentColor" xmlns="http://www.w3.org/2000/svg" shapeRendering="crispEdges">
              <rect x="3" y="5" width="1" height="1" />
              <rect x="7" y="5" width="1" height="1" />
              <rect x="3" y="7" width="5" height="1" />
            </svg>
         </div>
-        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">PABLO.APP</span>
+        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">PABLO-LOZANO.VERCEL.APP</span>
       </a>
 
       <InfoModal 

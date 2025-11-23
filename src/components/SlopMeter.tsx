@@ -3,6 +3,8 @@
 
 "use client";
 
+import { AlertTriangle } from "lucide-react";
+
 interface SlopMeterProps {
   value: number;
   onChange: (value: number) => void;
@@ -11,13 +13,16 @@ interface SlopMeterProps {
 }
 
 export default function SlopMeter({ value, onChange, onHover, disabled }: SlopMeterProps) {
-  const labels = ["Academic", "Balanced", "Engaging", "Catchy", "Viral"];
+  const labels = ["Academic", "Balanced", "Catchy", "Viral", "Slop"];
 
   return (
     <div className="w-full mb-4">
       <div className="flex items-center justify-between mb-1">
         <span className="text-xs font-bold text-black uppercase tracking-wider">Style</span>
-        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider border border-black px-1 bg-white">{labels[value - 1]}</span>
+        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider border border-black px-1 bg-white flex items-center gap-1">
+          {value === 5 && <AlertTriangle className="w-3 h-3 text-retro-red" />}
+          {labels[value - 1]}
+        </span>
       </div>
       <div className="relative h-10 flex items-center">
         <input
