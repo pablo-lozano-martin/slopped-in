@@ -48,7 +48,7 @@ function formatArxivDate(date: Date): string {
 }
 
 export async function GET(request: NextRequest) {
-  const ip = request.ip || request.headers.get("x-forwarded-for") || "unknown";
+  const ip = (request as any).ip || request.headers.get("x-forwarded-for") || "unknown";
   
   if (isRateLimited(ip)) {
     return NextResponse.json(
