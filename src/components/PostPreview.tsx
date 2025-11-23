@@ -57,7 +57,7 @@ export default function PostPreview({ content, isGenerating, model, style }: Pos
         {isGenerating && !content && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
             <div className="animate-pulse text-retro-red uppercase tracking-widest font-bold text-xl">
-              /// GENERATING SEQUENCE ///
+              {"/// GENERATING SEQUENCE ///"}
             </div>
           </div>
         )}

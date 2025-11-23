@@ -40,7 +40,7 @@ export default function InfoModal({ isOpen, onClose }: InfoModalProps) {
               <ul className="text-sm space-y-3">
                 <li>
                   <span className="font-bold bg-gray-200 px-1 mr-2">01</span>
-                  <strong>SEARCH</strong> for a topic (e.g. "LLMs", "CRISPR").
+                  <strong>SEARCH</strong> for a topic (e.g. &quot;LLMs&quot;, &quot;CRISPR&quot;).
                 </li>
                 <li>
                   <span className="font-bold bg-gray-200 px-1 mr-2">02</span>
