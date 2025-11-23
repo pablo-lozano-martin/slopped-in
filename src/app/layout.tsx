@@ -1,4 +1,4 @@
-// ABOUTME: Root layout component for Slopped-in application
+// ABOUTME: Root layout component for Sloppedin application
 // ABOUTME: Provides HTML structure, metadata, and global styles
 
 import type { Metadata } from "next";
@@ -12,7 +12,7 @@ const vt323 = VT323({
 });
 
 export const metadata: Metadata = {
-  title: "Slopped-in - AI LinkedIn Post Generator",
+  title: "Sloppedin - AI LinkedIn Post Generator",
   description: "Turn ArXiv papers into viral LinkedIn posts using local AI",
 };
 

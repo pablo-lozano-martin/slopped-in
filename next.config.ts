@@ -1,4 +1,4 @@
-// ABOUTME: Next.js configuration file for Slopped-in
+// ABOUTME: Next.js configuration file for Sloppedin
 // ABOUTME: Configures headers for WebGPU support and API routing
 
 import type { NextConfig } from "next";

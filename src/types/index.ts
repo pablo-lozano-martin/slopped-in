@@ -1,4 +1,4 @@
-// ABOUTME: TypeScript type definitions for Slopped-in
+// ABOUTME: TypeScript type definitions for Sloppedin
 // ABOUTME: Defines interfaces for papers, AI engine states, and component props
 
 export interface Paper {

@@ -44,7 +44,7 @@ export default function Home() {
   }, [showHelpHint]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("slopped-in-posts");
+    const saved = localStorage.getItem("sloppedin-posts");
     if (saved) {
       try {
         setSavedPosts(JSON.parse(saved));
@@ -56,7 +56,7 @@ export default function Home() {
 
   useEffect(() => {
     if (Object.keys(savedPosts).length > 0) {
-      localStorage.setItem("slopped-in-posts", JSON.stringify(savedPosts));
+      localStorage.setItem("sloppedin-posts", JSON.stringify(savedPosts));
     }
   }, [savedPosts]);
 
@@ -132,7 +132,7 @@ export default function Home() {
              <rect x="3" y="7" width="5" height="1" />
            </svg>
         </div>
-        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">SLOPPED-IN.VERCEL.APP</span>
+        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">SLOPPEDIN.VERCEL.APP</span>
       </div>
 
       {/* Pablo App Icon (Minimized State) */}
@@ -170,7 +170,7 @@ export default function Home() {
         <div className="border-b-2 border-black bg-white p-1 flex items-center justify-between shrink-0 select-none">
           <div className="flex-1 h-8 bg-stripes flex items-center px-2 overflow-hidden">
             <span className="bg-white px-4 text-lg font-bold uppercase tracking-widest border-2 border-black shadow-sm whitespace-nowrap">
-              SYSTEM_V1.0 // SLOPPED-IN.VERCEL.APP
+              SYSTEM_V1.0 // SLOPPEDIN.VERCEL.APP
             </span>
           </div>
           <div className="flex gap-1 ml-2 pl-2 bg-white">
@@ -193,13 +193,13 @@ export default function Home() {
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           
           {/* LEFT PANEL: INPUTS & CONTROLS */}
-          <div className="lg:w-[600px] xl:w-[650px] flex flex-col border-r-2 border-black bg-gray-50 shrink-0">
+          <div className="lg:w-[500px] xl:w-[550px] flex flex-col border-r-2 border-black bg-gray-50 shrink-0">
             
             {/* Header & Search (Fixed Top) */}
             <div className="px-4 pt-2 pb-4 border-b-2 border-black bg-white z-10">
               <div className="flex justify-between items-center mb-2">
                 <h1 className="text-[3.2rem] font-bold text-black uppercase tracking-tighter leading-none" style={{ textShadow: '2px 2px 0px #e0e0e0' }}>
-                  SLOPPED-IN
+                  SLOPPED<span className="text-retro-red">IN</span>
                 </h1>
                 
                 {/* Compact Status Indicator */}

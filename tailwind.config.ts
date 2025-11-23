@@ -1,4 +1,4 @@
-// ABOUTME: Tailwind CSS configuration for Slopped-in
+// ABOUTME: Tailwind CSS configuration for Sloppedin
 // ABOUTME: Defines theme and content paths for styling
 
 import type { Config } from "tailwindcss";

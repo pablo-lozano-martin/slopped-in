@@ -26,7 +26,7 @@ export default function InfoModal({ isOpen, onClose }: InfoModalProps) {
           <section className="border-b-2 border-black pb-6">
             <h3 className="text-lg font-bold uppercase mb-3 bg-black text-white inline-block px-2">Mission</h3>
             <p className="text-sm mb-2">
-              <strong>Slopped-In</strong> proves you only need a 2GB model to replicate the intellectual depth of most daily LinkedIn posts.
+              <strong>Sloppedin</strong> proves you only need a 2GB model to replicate the intellectual depth of most daily LinkedIn posts.
             </p>
             <p className="text-sm">
               The entire process runs <strong>100% locally</strong> in your browser.

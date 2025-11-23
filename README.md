@@ -1,10 +1,10 @@
-![Slopped-In](./slopped-in.png)
+![Sloppedin](./sloppedin.png)
 
-**Slopped-In** proves you only need a 2GB model to replicate the intellectual depth of most daily LinkedIn posts.
+**Sloppedin** proves you only need a 2GB model to replicate the intellectual depth of most daily LinkedIn posts.
 
 The entire process runs **100% locally** in your browser using WebGPU. No data is sent to external servers for generation.
 
-**Live Demo:** [slopped-in.vercel.app](https://slopped-in.vercel.app)
+🌐 **Live Demo:** [sloppedin.vercel.app](https://sloppedin.vercel.app)
 
 ## 🔄 Workflow
 
