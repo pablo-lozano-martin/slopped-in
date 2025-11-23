@@ -131,6 +131,27 @@ export default function Home() {
 
   return (
     <div className="h-screen bg-retro-gray p-4 font-mono bg-dither flex flex-col overflow-hidden relative">
+
+      {/* Mobile Warning */}
+      <div className="md:hidden flex-1 flex items-center justify-center z-50">
+         <div className="bg-white border-2 border-black shadow-retro p-6 max-w-sm mx-auto text-center">
+            <div className="w-12 h-12 bg-retro-red text-white flex items-center justify-center mx-auto mb-4 border-2 border-black shadow-sm">
+              <AlertCircle className="w-8 h-8" />
+            </div>
+            <h2 className="text-xl font-bold uppercase mb-2">Desktop Required</h2>
+            <p className="text-sm mb-4 font-bold">
+              This application runs a full AI model locally in your browser.
+            </p>
+            <p className="text-xs text-gray-600 mb-6">
+              Please access this site from a desktop computer with decent specifications (GPU recommended). Mobile devices are not supported.
+            </p>
+            <div className="text-[10px] uppercase tracking-widest text-gray-400 border-t border-gray-200 pt-2">
+              ERR_MOBILE_DEVICE_DETECTED
+            </div>
+         </div>
+      </div>
+
+      <div className="hidden md:block h-full w-full relative">
       
       {/* Desktop Icon (Minimized State) */}
       <div 
@@ -383,6 +404,7 @@ export default function Home() {
           </div>
 
         </div>
+      </div>
       </div>
     </div>
   );

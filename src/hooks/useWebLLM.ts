@@ -71,7 +71,13 @@ export function useWebLLM(selectedModel: string) {
       currentModelRef.current = selectedModel;
       setEngineState("ready");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to initialize AI engine");
+      const errorMessage = err instanceof Error ? err.message : "Failed to initialize AI engine";
+      // Add helpful hint for network errors
+      const finalError = errorMessage.includes("fetch") || errorMessage.includes("network") || errorMessage.includes("Failed to fetch") 
+        ? `${errorMessage}. Try a smaller model (3B) or clear cache.` 
+        : errorMessage;
+        
+      setError(finalError);
       setEngineState("error");
     }
   }, [selectedModel]);
