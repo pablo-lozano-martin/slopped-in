@@ -9,6 +9,7 @@ import ResultsGrid from "@/components/ResultsGrid";
 import PostPreview from "@/components/PostPreview";
 import SlopMeter from "@/components/SlopMeter";
 import ModelSelector from "@/components/ModelSelector";
+import InfoModal from "@/components/InfoModal";
 import { useWebLLM } from "@/hooks/useWebLLM";
 import { Paper } from "@/types";
 import { Loader2, AlertCircle, Minus, X, Square } from "lucide-react";
@@ -24,8 +25,23 @@ export default function Home() {
   const [hoverInfo, setHoverInfo] = useState<string | null>(null);
   const [savedPosts, setSavedPosts] = useState<Record<string, string>>({});
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [showHelpHint, setShowHelpHint] = useState(true);
+  const [arrowText, setArrowText] = useState("<<<");
 
-  const { engineState, loadingProgress, error: engineError, generatePost } = useWebLLM(selectedModel);
+  const slopLabels = ["Academic", "Balanced", "Engaging", "Catchy", "Viral"];
+  const { engineState, loadingProgress, error: engineError, generatePost, initializeEngine } = useWebLLM(selectedModel);
+
+  useEffect(() => {
+    if (!showHelpHint) return;
+    const frames = ["", "<", "<<", "<<<", "<<", "<"];
+    let i = 0;
+    const interval = setInterval(() => {
+      setArrowText(frames[i]);
+      i = (i + 1) % frames.length;
+    }, 400);
+    return () => clearInterval(interval);
+  }, [showHelpHint]);
 
   useEffect(() => {
     const saved = localStorage.getItem("slopped-in-posts");
@@ -102,7 +118,10 @@ export default function Home() {
         className={`absolute bottom-8 left-8 flex flex-col items-center gap-2 cursor-pointer group transition-all duration-300 ease-in-out ${
           isMinimized ? "opacity-100 scale-100" : "opacity-0 scale-0 pointer-events-none"
         }`}
-        onClick={() => setIsMinimized(false)}
+        onClick={() => {
+          setIsMinimized(false);
+          setIsInfoOpen(false);
+        }}
       >
         <div className="w-16 h-16 bg-white border-2 border-black shadow-retro flex items-center justify-center group-hover:bg-retro-red group-hover:text-white transition-colors">
            <svg width="40" height="40" viewBox="0 0 11 11" fill="currentColor" xmlns="http://www.w3.org/2000/svg" shapeRendering="crispEdges">
@@ -113,7 +132,7 @@ export default function Home() {
              <rect x="3" y="7" width="5" height="1" />
            </svg>
         </div>
-        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">SLOPPED-IN.APP</span>
+        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">SLOPPED-IN.VERCEL.APP</span>
       </div>
 
       {/* Pablo App Icon (Minimized State) */}
@@ -135,14 +154,23 @@ export default function Home() {
         <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">PABLO.APP</span>
       </a>
 
+      <InfoModal 
+        isOpen={isInfoOpen} 
+        onClose={() => {
+          setIsInfoOpen(false);
+          setIsMinimized(false);
+        }} 
+      />
+
       <div className={`w-full h-full max-w-[1800px] mx-auto border-2 border-black bg-white shadow-retro flex flex-col relative transition-all duration-300 ease-in-out transform origin-bottom-left ${
         isMinimized ? "scale-0 opacity-0 translate-y-[200px] pointer-events-none" : "scale-100 opacity-100 translate-y-0"
       }`}>
+        
         {/* Window Title Bar */}
         <div className="border-b-2 border-black bg-white p-1 flex items-center justify-between shrink-0 select-none">
           <div className="flex-1 h-8 bg-stripes flex items-center px-2 overflow-hidden">
             <span className="bg-white px-4 text-lg font-bold uppercase tracking-widest border-2 border-black shadow-sm whitespace-nowrap">
-              SYSTEM_V1.0 // SLOPPED-IN.APP
+              SYSTEM_V1.0 // SLOPPED-IN.VERCEL.APP
             </span>
           </div>
           <div className="flex gap-1 ml-2 pl-2 bg-white">
@@ -165,42 +193,59 @@ export default function Home() {
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           
           {/* LEFT PANEL: INPUTS & CONTROLS */}
-          <div className="lg:w-[500px] xl:w-[550px] flex flex-col border-r-2 border-black bg-gray-50 shrink-0">
+          <div className="lg:w-[600px] xl:w-[650px] flex flex-col border-r-2 border-black bg-gray-50 shrink-0">
             
             {/* Header & Search (Fixed Top) */}
-            <div className="p-4 border-b-2 border-black bg-white z-10">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h1 className="text-5xl font-bold text-black uppercase tracking-tighter leading-none mb-1" style={{ textShadow: '3px 3px 0px #e0e0e0' }}>
-                    SLOPPED-IN
-                  </h1>
-                  <p className="text-xs uppercase tracking-widest text-gray-500">Viral Post Generator Module</p>
-                </div>
+            <div className="px-4 pt-2 pb-4 border-b-2 border-black bg-white z-10">
+              <div className="flex justify-between items-center mb-2">
+                <h1 className="text-[3.2rem] font-bold text-black uppercase tracking-tighter leading-none" style={{ textShadow: '2px 2px 0px #e0e0e0' }}>
+                  SLOPPED-IN
+                </h1>
                 
                 {/* Compact Status Indicator */}
-                <div className="flex flex-col items-end gap-2">
+                <div className="flex flex-col items-end gap-2 relative">
                    <div className="flex items-center gap-2">
                       {/* Info Display Box */}
-                      <div className="h-8 px-3 border border-black bg-white text-black flex items-center min-w-[160px] justify-end">
-                        <span className="text-xs font-bold uppercase tracking-wider whitespace-nowrap overflow-hidden">
+                      <div className="h-9 pl-1.5 pr-2 border border-black bg-white text-black flex items-center justify-between min-w-[240px]">
+                        <button 
+                          onClick={() => {
+                            setIsInfoOpen(true);
+                            setIsMinimized(true);
+                            setShowHelpHint(false);
+                          }}
+                          className={`mr-2 p-0.5 transition-colors rounded-sm ${showHelpHint ? "bg-retro-red text-white" : "hover:bg-black hover:text-white"}`}
+                          onMouseEnter={() => setHoverInfo("OPEN SYSTEM MANUAL")}
+                          onMouseLeave={() => setHoverInfo(null)}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                        </button>
+                        <span className={`text-xs font-bold uppercase tracking-wider whitespace-nowrap overflow-hidden text-right flex-1 ${showHelpHint ? "text-retro-red" : ""}`}>
                           {hoverInfo ? hoverInfo : 
+                           showHelpHint ? `${arrowText} READ MANUAL FIRST` :
                            engineState === 'loading' ? `DOWNLOADING... ${Math.round(loadingProgress)}%` :
                            engineState === 'generating' ? 'INFERENCE RUNNING' :
                            engineState === 'ready' ? 'SYSTEM READY' : 'WAITING FOR INPUT'}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider border border-black px-2 py-1 bg-gray-50 h-8">
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider border border-black px-2 py-1 bg-gray-50 h-9">
                           <div className={`w-2 h-2 border border-black ${engineState === 'loading' || engineState === 'generating' ? 'bg-retro-red animate-pulse' : engineState === 'ready' ? 'bg-black' : 'bg-transparent'}`} />
                           <span>{engineState === 'loading' ? 'INIT' : engineState === 'generating' ? 'BUSY' : engineState === 'ready' ? 'READY' : 'IDLE'}</span>
                       </div>
                    </div>
                    {engineState === 'loading' && (
-                      <div className="w-full h-1 border border-black bg-white">
+                      <div className="absolute -bottom-3 right-0 w-full h-1 border border-black bg-white">
                         <div className="h-full bg-retro-red transition-all duration-300" style={{ width: `${loadingProgress}%` }} />
                       </div>
                    )}
                 </div>
+              </div>
+
+              {/* Subtitle Section */}
+              <div className="w-full bg-gray-50 py-1 mb-4">
+                 <div className="flex whitespace-nowrap px-1 justify-center">
+                    <span className="text-xs uppercase tracking-widest text-gray-500">Viral Post Generator Module (or how to turn serious papers into linked-in ai slop)</span>
+                 </div>
               </div>
 
               <SearchBar onSearch={handleSearch} isLoading={isSearching} onHover={setHoverInfo} />
@@ -242,22 +287,38 @@ export default function Home() {
                  </div>
                </div>
                
-               <button
-                  onClick={handleGenerate}
-                  onMouseEnter={() => setHoverInfo("INITIATE GENERATION SEQUENCE")}
-                  onMouseLeave={() => setHoverInfo(null)}
-                  disabled={engineState !== "ready" || !selectedPaper}
-                  className="w-full py-2 bg-retro-red text-white text-base font-bold border-2 border-black hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px] uppercase tracking-widest flex items-center justify-center gap-2"
-                >
-                  {engineState === "generating" ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      PROCESSING
-                    </>
-                  ) : (
-                    "GENERATE"
-                  )}
-                </button>
+               {engineState === "idle" || engineState === "error" ? (
+                 <button
+                    onClick={initializeEngine}
+                    onMouseEnter={() => setHoverInfo("INITIALIZE AI ENGINE")}
+                    onMouseLeave={() => setHoverInfo(null)}
+                    className="w-full py-2 bg-black text-white text-base font-bold border-2 border-black hover:bg-gray-800 transition-all shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px] uppercase tracking-widest flex items-center justify-center gap-2"
+                  >
+                    {engineState === "error" ? "RETRY INITIALIZATION" : "LOAD MODEL"}
+                  </button>
+               ) : (
+                 <button
+                    onClick={handleGenerate}
+                    onMouseEnter={() => setHoverInfo("INITIATE GENERATION SEQUENCE")}
+                    onMouseLeave={() => setHoverInfo(null)}
+                    disabled={engineState !== "ready" || !selectedPaper}
+                    className="w-full py-2 bg-retro-red text-white text-base font-bold border-2 border-black hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-retro active:shadow-none active:translate-x-[2px] active:translate-y-[2px] uppercase tracking-widest flex items-center justify-center gap-2"
+                  >
+                    {engineState === "generating" ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        PROCESSING
+                      </>
+                    ) : engineState === "loading" ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        LOADING MODEL...
+                      </>
+                    ) : (
+                      "GENERATE"
+                    )}
+                  </button>
+               )}
             </div>
           </div>
 
@@ -269,6 +330,8 @@ export default function Home() {
                <PostPreview
                   content={generatedPost}
                   isGenerating={engineState === "generating"}
+                  model={selectedModel}
+                  style={slopLabels[slopLevel - 1]}
                 />
              </div>
 
