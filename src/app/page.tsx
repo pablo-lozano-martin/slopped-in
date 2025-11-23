@@ -10,6 +10,7 @@ import PostPreview from "@/components/PostPreview";
 import SlopMeter from "@/components/SlopMeter";
 import ModelSelector from "@/components/ModelSelector";
 import InfoModal from "@/components/InfoModal";
+import ConfirmationModal from "@/components/ConfirmationModal";
 import { useWebLLM } from "@/hooks/useWebLLM";
 import { Paper } from "@/types";
 import { Loader2, AlertCircle, Minus, X, Square } from "lucide-react";
@@ -26,11 +27,13 @@ export default function Home() {
   const [savedPosts, setSavedPosts] = useState<Record<string, string>>({});
   const [isMinimized, setIsMinimized] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [showHelpHint, setShowHelpHint] = useState(true);
   const [arrowText, setArrowText] = useState("<<<");
+  const [notification, setNotification] = useState<string | null>(null);
 
   const slopLabels = ["Academic", "Balanced", "Engaging", "Catchy", "Viral"];
-  const { engineState, loadingProgress, error: engineError, generatePost, initializeEngine } = useWebLLM(selectedModel);
+  const { engineState, loadingProgress, error: engineError, generatePost, initializeEngine, deleteCache } = useWebLLM(selectedModel);
 
   useEffect(() => {
     if (!showHelpHint) return;
@@ -110,6 +113,22 @@ export default function Home() {
     }
   };
 
+  const handleRequestDeleteCache = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDeleteCache = async () => {
+    const success = await deleteCache();
+    setIsDeleteModalOpen(false);
+    if (success) {
+      setNotification("CACHE CLEARED SUCCESSFULLY");
+      setTimeout(() => setNotification(null), 3000);
+    } else {
+      setNotification("CACHE CLEAR FAILED");
+      setTimeout(() => setNotification(null), 3000);
+    }
+  };
+
   return (
     <div className="h-screen bg-retro-gray p-4 font-mono bg-dither flex flex-col overflow-hidden relative">
       
@@ -160,6 +179,14 @@ export default function Home() {
           setIsInfoOpen(false);
           setIsMinimized(false);
         }} 
+      />
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDeleteCache}
+        title="DELETE CACHED MODELS"
+        message="Are you sure you want to delete all cached models? This will free up space but require re-downloading models next time."
       />
 
       <div className={`w-full h-full max-w-[1800px] mx-auto border-2 border-black bg-white shadow-retro flex flex-col relative transition-all duration-300 ease-in-out transform origin-bottom-left ${
@@ -219,8 +246,9 @@ export default function Home() {
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
                         </button>
-                        <span className={`text-xs font-bold uppercase tracking-wider whitespace-nowrap overflow-hidden text-right flex-1 ${showHelpHint ? "text-retro-red" : ""}`}>
-                          {hoverInfo ? hoverInfo : 
+                        <span className={`text-xs font-bold uppercase tracking-wider whitespace-nowrap overflow-hidden text-right flex-1 ${(notification?.includes("FAILED") || (!notification && showHelpHint)) ? "text-retro-red" : ""}`}>
+                          {notification ? notification :
+                           hoverInfo ? hoverInfo : 
                            showHelpHint ? `${arrowText} READ MANUAL FIRST` :
                            engineState === 'loading' ? `DOWNLOADING... ${Math.round(loadingProgress)}%` :
                            engineState === 'generating' ? 'INFERENCE RUNNING' :
@@ -274,6 +302,7 @@ export default function Home() {
                       value={selectedModel}
                       onChange={setSelectedModel}
                       onHover={setHoverInfo}
+                      onDeleteCache={handleRequestDeleteCache}
                       disabled={engineState === "loading"}
                     />
                  </div>

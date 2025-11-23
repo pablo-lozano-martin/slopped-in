@@ -17,7 +17,7 @@ export default function SlopMeter({ value, onChange, onHover, disabled }: SlopMe
     <div className="w-full mb-4">
       <div className="flex items-center justify-between mb-1">
         <span className="text-xs font-bold text-black uppercase tracking-wider">Style</span>
-        <span className="text-[10px] font-bold text-retro-red uppercase tracking-wider border border-black px-1 bg-white">{labels[value - 1]}</span>
+        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider border border-black px-1 bg-white">{labels[value - 1]}</span>
       </div>
       <div className="relative h-10 flex items-center">
         <input

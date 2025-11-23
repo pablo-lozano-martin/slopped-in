@@ -3,7 +3,7 @@
 
 "use client";
 
-import { CreateMLCEngine, MLCEngine } from "@mlc-ai/web-llm";
+import { CreateMLCEngine, MLCEngine, deleteModelAllInfoInCache } from "@mlc-ai/web-llm";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { EngineState } from "@/types";
 
@@ -13,6 +13,39 @@ export function useWebLLM(selectedModel: string) {
   const [error, setError] = useState<string | null>(null);
   const engineRef = useRef<MLCEngine | null>(null);
   const currentModelRef = useRef<string | null>(null);
+
+  const deleteCache = useCallback(async () => {
+    try {
+      // List of models we support
+      const models = [
+        "Qwen2.5-3B-Instruct-q4f16_1-MLC",
+        "Qwen2.5-7B-Instruct-q4f16_1-MLC",
+        "Llama-3.2-3B-Instruct-q4f16_1-MLC"
+      ];
+      
+      for (const model of models) {
+        await deleteModelAllInfoInCache(model);
+      }
+      
+      // Also try to clear browser caches starting with webllm/
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        for (const key of keys) {
+          if (key.startsWith('webllm/')) {
+            await caches.delete(key);
+          }
+        }
+      }
+      
+      setEngineState("idle");
+      engineRef.current = null;
+      currentModelRef.current = null;
+      return true;
+    } catch (err) {
+      console.error("Failed to delete cache:", err);
+      return false;
+    }
+  }, []);
 
   const initializeEngine = useCallback(async () => {
     if (engineRef.current && currentModelRef.current === selectedModel) {
@@ -431,5 +464,6 @@ LinkedIn Post:`;
     error,
     generatePost,
     initializeEngine,
+    deleteCache,
   };
 }
