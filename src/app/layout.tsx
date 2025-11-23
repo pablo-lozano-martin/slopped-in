@@ -12,8 +12,11 @@ const vt323 = VT323({
 });
 
 export const metadata: Metadata = {
-  title: "Sloppedin - AI LinkedIn Post Generator",
+  title: "sloppedin",
   description: "Turn ArXiv papers into viral LinkedIn posts using local AI",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
