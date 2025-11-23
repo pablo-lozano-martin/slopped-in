@@ -140,7 +140,7 @@ export default function Home() {
             </div>
             <h2 className="text-xl font-bold uppercase mb-2">Desktop Required</h2>
             <p className="text-sm mb-4 font-bold">
-              This application runs a full AI model locally in your browser.
+              This application runs an AI model locally in your browser.
             </p>
             <p className="text-xs text-gray-600 mb-6">
               Please access this site from a desktop computer with decent specifications (GPU recommended). Mobile devices are not supported.
