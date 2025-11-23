@@ -9,4 +9,4 @@ export interface Paper {
   link: string;
 }
 
-export type EngineState = "loading" | "ready" | "generating" | "error";
+export type EngineState = "idle" | "loading" | "ready" | "generating" | "error";
