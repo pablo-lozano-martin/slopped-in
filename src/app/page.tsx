@@ -177,7 +177,7 @@ export default function Home() {
 
       {/* Pablo App Icon (Minimized State) */}
       <a 
-        href="https://pablo-lozano.vercel.app"
+        href="https://pablozano.com"
         target="_blank"
         rel="noopener noreferrer"
         className={`absolute bottom-8 left-40 flex flex-col items-center gap-2 cursor-pointer group transition-all duration-300 ease-in-out ${
@@ -191,7 +191,7 @@ export default function Home() {
              <rect x="3" y="7" width="5" height="1" />
            </svg>
         </div>
-        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">PABLO-LOZANO.VERCEL.APP</span>
+        <span className="bg-white px-2 border border-black text-xs font-bold shadow-sm whitespace-nowrap">PABLOZANO.COM</span>
       </a>
 
       <InfoModal 
@@ -393,12 +393,12 @@ export default function Home() {
                     <span>MADRID</span>
                 </div>
                 <a 
-                  href="https://pablo-lozano.vercel.app" 
+                  href="https://pablozano.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:text-retro-red transition-colors"
                 >
-                    PABLO-LOZANO.VERCEL.APP
+                    PABLOZANO.COM
                 </a>
              </div>
           </div>
